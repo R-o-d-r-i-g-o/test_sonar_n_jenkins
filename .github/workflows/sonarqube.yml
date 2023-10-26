@@ -18,7 +18,7 @@ jobs:
       - name: Set Up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
+          go-version: 1.21.2
 
       - name: Download SonarQube Scanner
         run: |
