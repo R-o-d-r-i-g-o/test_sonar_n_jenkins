@@ -28,14 +28,9 @@ import (
 func main() {
 	r := gin.Default()
 
-	// r.Use(gin.DisableCors())
-
-	// docs.SwaggerInfo.BasePath = "/api/v1"
-
 	r.GET("/test", pedroGay)
 
-	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(":8080")
 }
