@@ -1,42 +1,21 @@
-name: SonarQube Analysis
+name: Build
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, synchronize, reopened]
-    
+
+
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
-
+    permissions: read-all
     steps:
-      - name: Check Out Code
-        uses: actions/checkout@v2
-
-      - name: Set Up Go
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v2
         with:
-          go-version: 1.21.2
-
-      - name: Download SonarQube Scanner
-        run: |
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-          unzip sonar-scanner-cli-4.6.2.2472-linux.zip
-        shell: bash
-
-      - name: Configure SonarQube Scanner
-        run: |
-          echo "sonar.host.url=$SONAR_HOST_URL" > sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
-          echo "sonar.login=$SONAR_TOKEN" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST_URL }}
-
-      - name: Build and Analyze Go Project
-        run: |
-          go build
-          sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
