@@ -28,10 +28,11 @@ jobs:
 
       - name: Configure SonarQube Scanner
         run: |
-          echo "sonar.host.url=YOUR_SONARQUBE_SERVER_URL" > sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
+          echo "sonar.host.url=$SONAR_HOST_URL" > sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
           echo "sonar.login=$SONAR_TOKEN" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST_URL }}
 
       - name: Build and Analyze Go Project
         run: |
